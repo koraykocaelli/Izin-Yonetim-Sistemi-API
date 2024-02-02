@@ -23,5 +23,9 @@ public class Employee extends BaseEntity {
     private String email;
     @Column(name = "DEPARTMAN",length = 100)
     private String department;
+    @Column(name = "IZIN_GUNLERI")
+    private int dayOff = 15;
+    @Column(name = "KULLANILAN_IZIN_GUNLERI")
+    private int usedDayOff = 0;
 
 }
