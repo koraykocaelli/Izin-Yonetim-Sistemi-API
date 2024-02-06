@@ -48,6 +48,14 @@ public class EmployeeController {
 
 
 
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity<Boolean> deleteEmployee(@PathVariable("id") Long id){
+        Boolean status = employeeService.deleteEmployee(id);
+        return ResponseEntity.ok(status);
+    }
+
+
+
 
 
 }
