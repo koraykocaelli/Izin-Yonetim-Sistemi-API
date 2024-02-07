@@ -1,5 +1,6 @@
 package com.kocaelli.koray.izinyonetimsistemi.api.api;
 
+import com.kocaelli.koray.izinyonetimsistemi.api.dto.EmployeeDto;
 import com.kocaelli.koray.izinyonetimsistemi.api.entity.Employee;
 import com.kocaelli.koray.izinyonetimsistemi.api.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,29 +20,29 @@ public class EmployeeController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee){
-        Employee resultEmployeemployee = employeeService.createEmployee(employee);
+    public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeDto employee){
+        EmployeeDto resultEmployeemployee = employeeService.createEmployee(employee);
         return ResponseEntity.ok(resultEmployeemployee);
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<Employee>> getEmployees(){
-        List<Employee> employees = employeeService.getEmployees();
+    public ResponseEntity<List<EmployeeDto>> getEmployees(){
+        List<EmployeeDto> employees = employeeService.getEmployees();
         return ResponseEntity.ok(employees);
     }
 
     @GetMapping("/getById/{id}")
-    public ResponseEntity <Employee> getEmployee(@PathVariable("id") Long id){
+    public ResponseEntity <EmployeeDto> getEmployee(@PathVariable("id") Long id){
 
-        Employee employee = employeeService.getEmployee(id);
+        EmployeeDto employee = employeeService.getEmployee(id);
 
         return ResponseEntity.ok(employee);
 
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Employee> UpdateEmployee(@PathVariable Long id, @RequestBody Employee employee){
-        Employee resultEmployee = employeeService.updateEmployee(id,employee);
+    public ResponseEntity<EmployeeDto> UpdateEmployee(@PathVariable Long id, @RequestBody EmployeeDto employee){
+        EmployeeDto resultEmployee = employeeService.updateEmployee(id,employee);
         return ResponseEntity.ok(resultEmployee);
     }
 

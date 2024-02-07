@@ -1,14 +1,18 @@
 package com.kocaelli.koray.izinyonetimsistemi.api.service.impl;
 
+import com.kocaelli.koray.izinyonetimsistemi.api.dto.EmployeeDto;
 import com.kocaelli.koray.izinyonetimsistemi.api.entity.Employee;
 import com.kocaelli.koray.izinyonetimsistemi.api.repository.EmployeeRepository;
 import com.kocaelli.koray.izinyonetimsistemi.api.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,31 +20,36 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+    private final ModelMapper modelMapper;
+
     @Override
-    public Employee createEmployee(Employee employee) {
+    public EmployeeDto createEmployee(EmployeeDto employeeDto) {
+        Employee employee = modelMapper.map(employeeDto, Employee.class);
         employee.setCreatedDate(new Date());
         employee.setCreatedBy("admin");
-        return employeeRepository.save(employee);
+        return modelMapper.map(employeeRepository.save(employee), EmployeeDto.class);
     }
 
     @Override
-    public List<Employee> getEmployees() {
-        return employeeRepository.findAll();
+    public List<EmployeeDto> getEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
+        List<EmployeeDto> dtos = employees.stream().map(employee -> modelMapper.map(employee,EmployeeDto.class)).collect(Collectors.toList());
+        return dtos;
     }
 
     @Override
-    public Employee getEmployee(Long id) {
+    public EmployeeDto getEmployee(Long id) {
         Optional<Employee> employee = employeeRepository.findById(id);
 
         if (employee.isPresent()){
-            return employee.get();
+            return modelMapper.map(employee.get(),EmployeeDto.class);
         }
         return null;
     }
 
 
     @Override
-    public Employee updateEmployee(Long id, Employee employee) {
+    public EmployeeDto updateEmployee(Long id, EmployeeDto employee) {
         Optional<Employee> resultEmployee = employeeRepository.findById(id);
 
         if (resultEmployee.isPresent()){
@@ -53,7 +62,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             resultEmployee.get().setDayOff(employee.getUsedDayOff());
 
 
-            return employeeRepository.save(resultEmployee.get());
+            return modelMapper.map(employeeRepository.save(resultEmployee.get()),EmployeeDto.class);
         }
         return null;
     }
