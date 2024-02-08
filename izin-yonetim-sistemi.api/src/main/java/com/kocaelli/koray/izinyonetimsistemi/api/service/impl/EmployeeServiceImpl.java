@@ -7,6 +7,9 @@ import com.kocaelli.koray.izinyonetimsistemi.api.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -76,5 +79,20 @@ public class EmployeeServiceImpl implements EmployeeService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Page<Employee> pagination(int currentPage, int pageSize) {
+
+        Pageable pageable = PageRequest.of(currentPage,pageSize);
+
+
+        return employeeRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Employee> pagination(Pageable pageable) {
+
+        return employeeRepository.findAll(pageable);
     }
 }

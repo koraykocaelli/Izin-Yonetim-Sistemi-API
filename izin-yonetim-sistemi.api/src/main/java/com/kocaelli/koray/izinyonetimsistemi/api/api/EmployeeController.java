@@ -3,12 +3,13 @@ package com.kocaelli.koray.izinyonetimsistemi.api.api;
 import com.kocaelli.koray.izinyonetimsistemi.api.dto.EmployeeDto;
 import com.kocaelli.koray.izinyonetimsistemi.api.entity.Employee;
 import com.kocaelli.koray.izinyonetimsistemi.api.service.EmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/employee")
@@ -44,6 +45,16 @@ public class EmployeeController {
     public ResponseEntity<EmployeeDto> UpdateEmployee(@PathVariable Long id, @RequestBody EmployeeDto employee){
         EmployeeDto resultEmployee = employeeService.updateEmployee(id,employee);
         return ResponseEntity.ok(resultEmployee);
+    }
+
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<Employee>> pagination(@RequestParam int currentPage,@RequestParam  int pageSize){
+        return ResponseEntity.ok(employeeService.pagination(currentPage,pageSize));
+    }
+
+    @GetMapping("/pagination/v1")
+    public ResponseEntity<Page<Employee>> pagination(Pageable pageable){
+        return ResponseEntity.ok(employeeService.pagination(pageable));
     }
 
 
