@@ -4,14 +4,17 @@ import com.kocaelli.koray.izinyonetimsistemi.api.dto.EmployeeDto;
 import com.kocaelli.koray.izinyonetimsistemi.api.entity.Employee;
 import com.kocaelli.koray.izinyonetimsistemi.api.repository.EmployeeRepository;
 import com.kocaelli.koray.izinyonetimsistemi.api.service.EmployeeService;
+import com.kocaelli.koray.izinyonetimsistemi.api.util.CustomPage;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -94,5 +97,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Page<Employee> pagination(Pageable pageable) {
 
         return employeeRepository.findAll(pageable);
+    }
+
+    @Override
+    public Slice<Employee> slice(Pageable pageable) {
+        return employeeRepository.findAll(pageable);
+    }
+
+    @Override
+    public CustomPage<EmployeeDto> customPagination(Pageable pageable) {
+        Page<Employee> data = employeeRepository.findAll(pageable);
+        EmployeeDto[] dtos = modelMapper.map(data.getContent(), EmployeeDto[].class);
+        return new CustomPage<EmployeeDto>(data, Arrays.asList(dtos));
     }
 }

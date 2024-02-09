@@ -3,8 +3,10 @@ package com.kocaelli.koray.izinyonetimsistemi.api.api;
 import com.kocaelli.koray.izinyonetimsistemi.api.dto.EmployeeDto;
 import com.kocaelli.koray.izinyonetimsistemi.api.entity.Employee;
 import com.kocaelli.koray.izinyonetimsistemi.api.service.EmployeeService;
+import com.kocaelli.koray.izinyonetimsistemi.api.util.CustomPage;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
@@ -57,7 +59,15 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.pagination(pageable));
     }
 
+    @GetMapping("/pagination/v2")
+    public ResponseEntity<Slice<Employee>> slice(Pageable pageable){
+        return ResponseEntity.ok(employeeService.slice(pageable));
+    }
 
+    @GetMapping("/pagination/v3")
+    public ResponseEntity<CustomPage<EmployeeDto>> customPagination(Pageable pageable){
+        return ResponseEntity.ok(employeeService.customPagination(pageable));
+    }
 
 
     @DeleteMapping("/remove/{id}")
