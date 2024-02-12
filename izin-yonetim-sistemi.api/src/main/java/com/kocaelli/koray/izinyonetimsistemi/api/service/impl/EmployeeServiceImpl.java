@@ -1,5 +1,6 @@
 package com.kocaelli.koray.izinyonetimsistemi.api.service.impl;
 
+import com.kocaelli.koray.izinyonetimsistemi.api.advice.EmployeeNotFound;
 import com.kocaelli.koray.izinyonetimsistemi.api.dto.EmployeeDto;
 import com.kocaelli.koray.izinyonetimsistemi.api.entity.Employee;
 import com.kocaelli.koray.izinyonetimsistemi.api.repository.EmployeeRepository;
@@ -50,7 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employee.isPresent()){
             return modelMapper.map(employee.get(),EmployeeDto.class);
         }
-        return null;
+        throw new RuntimeException("Kullanıcı Bulunamadı");
     }
 
 
