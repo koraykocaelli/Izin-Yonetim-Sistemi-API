@@ -56,20 +56,25 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public EmployeeDto updateEmployee(Long id, EmployeeDto employee) {
+    public EmployeeDto updateEmployee(Long id, EmployeeDto employeeDto) {
         Optional<Employee> resultEmployee = employeeRepository.findById(id);
 
-        if (resultEmployee.isPresent()){
-            resultEmployee.get().setFirstName(employee.getFirstName());
-            resultEmployee.get().setLastName(employee.getLastName());
-            resultEmployee.get().setDepartment(employee.getDepartment());
-            resultEmployee.get().setEmail(employee.getEmail());
-            resultEmployee.get().setUpdatedBy("Admin");
+        if (resultEmployee.isPresent()) {
+            Employee existingEmployee = resultEmployee.get();
+            existingEmployee.setFirstName(employeeDto.getFirstName());
+            existingEmployee.setLastName(employeeDto.getLastName());
+            existingEmployee.setDepartment(employeeDto.getDepartment());
+            existingEmployee.setEmail(employeeDto.getEmail());
+            existingEmployee.setUpdatedBy("Admin");
 
-            resultEmployee.get().setDayOff(employee.getUsedDayOff());
+            // Kullanılan izin günlerini güncelle
+            existingEmployee.setUsedDayOff(employeeDto.getUsedDayOff());
 
+            // Kalan izin günlerini hesapla ve güncelle
+            int remainingLeaveDays = existingEmployee.getDayOff() - employeeDto.getUsedDayOff();
+            existingEmployee.setDayOff(remainingLeaveDays);
 
-            return modelMapper.map(employeeRepository.save(resultEmployee.get()),EmployeeDto.class);
+            return modelMapper.map(employeeRepository.save(existingEmployee), EmployeeDto.class);
         }
         return null;
     }

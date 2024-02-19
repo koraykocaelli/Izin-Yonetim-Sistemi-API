@@ -5,18 +5,11 @@ import lombok.Data;
 
 @Data
 public class EmployeeDto {
-
     private String firstName;
-
     private String lastName;
-
     private String email;
-
     private String department;
+    private int dayOff = 15; // Default/Kalan izin günleri
 
-    private int dayOff = 15;
-
-    private int usedDayOff = 0;
-
-
+    private int usedDayOff; // Kullanılan izin günleri
 }
