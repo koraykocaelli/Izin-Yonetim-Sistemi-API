@@ -67,11 +67,30 @@ public class EmployeeServiceImpl implements EmployeeService {
             existingEmployee.setEmail(employeeDto.getEmail());
             existingEmployee.setUpdatedBy("Admin");
 
-            // Kullanılan izin günlerini güncelle
-            existingEmployee.setUsedDayOff(employeeDto.getUsedDayOff());
+            // Güncellenmiş kullanılan izin günleri
+            int updatedUsedDayOff = employeeDto.getUsedDayOff();
 
-            // Kalan izin günlerini hesapla ve güncelle
-            int remainingLeaveDays = existingEmployee.getDayOff() - employeeDto.getUsedDayOff();
+            // Önceki kullanılan izin günlerini al
+            int previousUsedDayOff = existingEmployee.getUsedDayOff();
+
+            // Toplam kullanılan izin günlerini hesapla
+            int totalUsedDayOff = updatedUsedDayOff + previousUsedDayOff;
+
+            // Toplam kullanılan izin günleri maksimum 15 olmalı
+            if (totalUsedDayOff > 15) {
+                throw new IllegalArgumentException("Toplam kullanılan izin günleri maksimum 15 olmalıdır.");
+            }
+
+            // Kalan izin günlerini hesapla
+            int remainingLeaveDays = existingEmployee.getDayOff() - updatedUsedDayOff;
+
+            // Kalan izin günleri minimum 0 olmalı
+            if (remainingLeaveDays < 0) {
+                throw new IllegalArgumentException("Kalan izin günleri minimum 0 olmalıdır.");
+            }
+
+            // Güncellenmiş kullanılan izin günlerini ve kalan izin günlerini ayarla
+            existingEmployee.setUsedDayOff(totalUsedDayOff);
             existingEmployee.setDayOff(remainingLeaveDays);
 
             return modelMapper.map(employeeRepository.save(existingEmployee), EmployeeDto.class);
