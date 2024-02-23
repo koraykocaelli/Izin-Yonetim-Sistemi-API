@@ -24,9 +24,6 @@ public interface EmployeeService {
 
     Page<Employee> pagination(Pageable pageable);
 
-    Slice<Employee> slice(Pageable pageable);
-
-    CustomPage<EmployeeDto> customPagination (Pageable pageable);
 
 }
 

@@ -70,13 +70,13 @@ public class EmployeeServiceImpl implements EmployeeService {
             // Güncellenmiş kullanılan izin günleri
             int updatedUsedDayOff = employeeDto.getUsedDayOff();
 
-            // Önceki kullanılan izin günlerini al
+            // Önceki kullanılan izin günlerini alma
             int previousUsedDayOff = existingEmployee.getUsedDayOff();
 
-            // Toplam kullanılan izin günlerini hesapla
+            // Toplam kullanılan izin günleri
             int totalUsedDayOff = updatedUsedDayOff + previousUsedDayOff;
 
-            // Toplam kullanılan izin günleri maksimum 15 olmalı
+            // Toplam kullanılan izin günleri maksimum 15
             if (totalUsedDayOff > 15) {
                 throw new IllegalArgumentException("Toplam kullanılan izin günleri maksimum 15 olmalıdır.");
             }
@@ -84,7 +84,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             // Kalan izin günlerini hesapla
             int remainingLeaveDays = existingEmployee.getDayOff() - updatedUsedDayOff;
 
-            // Kalan izin günleri minimum 0 olmalı
+            // Kalan izin günleri minimum 0
             if (remainingLeaveDays < 0) {
                 throw new IllegalArgumentException("Kalan izin günleri minimum 0 olmalıdır.");
             }
@@ -124,15 +124,4 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findAll(pageable);
     }
 
-    @Override
-    public Slice<Employee> slice(Pageable pageable) {
-        return employeeRepository.findAll(pageable);
-    }
-
-    @Override
-    public CustomPage<EmployeeDto> customPagination(Pageable pageable) {
-        Page<Employee> data = employeeRepository.findAll(pageable);
-        EmployeeDto[] dtos = modelMapper.map(data.getContent(), EmployeeDto[].class);
-        return new CustomPage<EmployeeDto>(data, Arrays.asList(dtos));
-    }
 }

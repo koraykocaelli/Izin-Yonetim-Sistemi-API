@@ -44,7 +44,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<EmployeeDto> UpdateEmployee(@PathVariable("id") Long id, @RequestBody EmployeeDto employee){
+    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable("id") Long id, @RequestBody EmployeeDto employee){
         EmployeeDto resultEmployee = employeeService.updateEmployee(id,employee);
         return ResponseEntity.ok(resultEmployee);
     }
@@ -59,25 +59,12 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.pagination(pageable));
     }
 
-    @GetMapping("/pagination/v2")
-    public ResponseEntity<Slice<Employee>> slice(Pageable pageable){
-        return ResponseEntity.ok(employeeService.slice(pageable));
-    }
-
-    @GetMapping("/pagination/v3")
-    public ResponseEntity<CustomPage<EmployeeDto>> customPagination(Pageable pageable){
-        return ResponseEntity.ok(employeeService.customPagination(pageable));
-    }
-
 
     @DeleteMapping("/remove/{id}")
     public ResponseEntity<Boolean> deleteEmployee(@PathVariable("id") Long id){
         Boolean status = employeeService.deleteEmployee(id);
         return ResponseEntity.ok(status);
     }
-
-
-
 
 
 }
